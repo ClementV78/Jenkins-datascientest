@@ -35,7 +35,7 @@ stages {
                         sleep 2
                     done
 
-                    # Test the service
+                    # Test the service 
                     curl http://$CONTAINER_IP
                     '''
                     }
