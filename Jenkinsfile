@@ -21,8 +21,22 @@ stages {
                 steps {
                     script {
                     sh '''
-                    docker run -d -p 80:80 --name jenkins $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
-                    sleep 30
+                    #docker run -d -p 80:80 --name jenkins $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+                    #sleep 30
+
+                    # Get the container's IP address
+                    CONTAINER_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' jenkins)
+                    echo "Container IP: $CONTAINER_IP"
+                    
+                    # Wait until the container is ready to accept connections
+                    for i in {1..30}; do
+                        curl --silent --max-time 2 --output /dev/null http://$CONTAINER_IP && break
+                        echo "Waiting for the container to be ready..."
+                        sleep 2
+                    done
+
+                    # Test the service
+                    curl http://$CONTAINER_IP
                     '''
                     }
                 }
