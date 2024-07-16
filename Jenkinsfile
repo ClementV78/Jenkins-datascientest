@@ -10,8 +10,8 @@ stages {
             steps {
                 script {
                 sh '''
-                 docker rm -f jenkins
-                 docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG .
+                docker rm -f jenkins
+                docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG .
                 sleep 6
                 '''
                 }
@@ -22,7 +22,7 @@ stages {
                     script {
                     sh '''
                     docker run -d -p 80:80 --name jenkins $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
-                    sleep 10
+                    sleep 30
                     '''
                     }
                 }
